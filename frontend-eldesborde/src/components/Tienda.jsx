@@ -12,7 +12,7 @@ const Tienda = () => {
   useEffect(() => {
 
     fetch(
-      'http://localhost:8080/api/productos'
+      'https://ecommerce-eldesborde.onrender.com/api/productos'
     )
       .then(response => response.json())
       .then(data => {

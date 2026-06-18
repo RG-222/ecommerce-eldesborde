@@ -28,7 +28,7 @@ function PagoExitoso() {
         }
 
         const res = await fetch(
-          `http://localhost:8080/api/pagos/confirmar?token_ws=${token}`,
+          `https://ecommerce-eldesborde.onrender.com/api/pagos/confirmar?token_ws=${token}`,
           { method: "POST" }
         );
 

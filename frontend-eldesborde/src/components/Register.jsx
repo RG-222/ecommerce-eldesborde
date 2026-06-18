@@ -24,7 +24,7 @@ function Register() {
     try {
 
       const res = await fetch(
-        "http://localhost:8080/api/auth/register",
+        "https://ecommerce-eldesborde.onrender.com/api/auth/register",
         {
           method: "POST",
           headers: {

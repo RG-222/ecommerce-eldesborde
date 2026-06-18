@@ -14,7 +14,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:8080/api/auth/login", {
+    const res = await fetch("https://ecommerce-eldesborde.onrender.com/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

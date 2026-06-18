@@ -27,7 +27,7 @@ function ClienteDashboard() {
 
         const res =
           await fetch(
-            "http://localhost:8080/api/ordenes/mis-ordenes",
+            "https://ecommerce-eldesborde.onrender.com/api/ordenes/mis-ordenes",
             {
               headers: {
                 Authorization:

@@ -22,7 +22,7 @@ function AdminPanel() {
   // LOAD DATA
   // =======================
   const cargarProductos = () => {
-    fetch('http://localhost:8080/api/productos')
+    fetch('https://ecommerce-eldesborde.onrender.com/api/productos')
       .then(res => res.json())
       .then(data => setProductos(data));
   };
@@ -33,7 +33,7 @@ function AdminPanel() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        "http://localhost:8080/api/ordenes",
+        "https://ecommerce-eldesborde.onrender.com/api/ordenes",
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -115,7 +115,7 @@ function AdminPanel() {
 
       if (modoEdicion) {
         const res = await fetch(
-          `http://localhost:8080/api/productos/${productoEditandoId}`,
+          `https://ecommerce-eldesborde.onrender.com/api/productos/${productoEditandoId}`,
           {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -141,7 +141,7 @@ function AdminPanel() {
       formData.append('imagen', archivo);
 
       const res = await fetch(
-        'http://localhost:8080/api/productos/con-foto',
+        'https://ecommerce-eldesborde.onrender.com/api/productos/con-foto',
         { method: 'POST', body: formData }
       );
 
@@ -167,7 +167,7 @@ function AdminPanel() {
   };
 
   const eliminarProducto = async (id) => {
-    await fetch(`http://localhost:8080/api/productos/${id}`, {
+    await fetch(`https://ecommerce-eldesborde.onrender.com/api/productos/${id}`, {
       method: 'DELETE'
     });
     cargarProductos();

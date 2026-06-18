@@ -34,7 +34,7 @@ function Carrito() {
 
       // crear orden
       const ordenRes = await fetch(
-        "http://localhost:8080/api/ordenes",
+        "https://ecommerce-eldesborde.onrender.com/api/ordenes",
         {
           method: "POST",
           headers: {
@@ -62,7 +62,7 @@ function Carrito() {
 
       // crear pago
       const pagoRes = await fetch(
-        `http://localhost:8080/api/pagos/crear?ordenId=${orden.id}&monto=${total}`,
+        `https://ecommerce-eldesborde.onrender.com/api/pagos/crear?ordenId=${orden.id}&monto=${total}`,
         {
           method: "POST"
         }

@@ -12,7 +12,7 @@ function AdminOrders() {
         localStorage.getItem("token");
 
       const res = await fetch(
-        "http://localhost:8080/api/ordenes",
+        "https://ecommerce-eldesborde.onrender.com/api/ordenes",
         {
           headers: {
             Authorization:

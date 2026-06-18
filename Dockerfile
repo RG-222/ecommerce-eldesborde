@@ -2,10 +2,14 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-COPY . .
+COPY backend-ecommerce ./backend-ecommerce
 
-RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
+WORKDIR /app/backend-ecommerce
+
+RUN chmod +x mvnw
+
+RUN ./mvnw clean package -DskipTests
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["java", "-jar", "target/ecommerce-0.0.1-SNAPSHOT.jar"]

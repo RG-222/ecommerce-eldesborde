@@ -17,7 +17,19 @@ Proyecto Full-Stack para la gestión de ventas de bolsos, desarrollado para la a
 ## ⚙️ Configuración para Evaluar
 1.  **Base de Datos:** Base de datos en MySQL llamada `eldesborde_db`.
 2.  **Backend:** Credenciales de Cloudinary y MySQL en el archivo `application.properties`.
+.\mvnw spring-boot:run
 3.  **Frontend:** 
     - Ejecutar `npm install` para descargar dependencias.
     cd C:\Users\DELL\Desktop\Proyecto-El-Desborde\frontend-eldesborde
     - Ejecutar `npm run dev` para iniciar la interfaz.
+
+## Para probar WEBPAY
+1. Tarjeta de prueba aprobada
+    Número tarjeta: 4051885600446623
+    CVV: 123
+    Fecha vencimiento: cualquier fecha futura (ej. 12/30)
+
+    Después te pedirá autenticación bancaria:
+
+    RUT: 11.111.111-1
+    Clave: 123

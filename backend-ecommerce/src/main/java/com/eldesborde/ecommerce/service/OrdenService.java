@@ -30,12 +30,8 @@ public class OrdenService {
         return ordenRepo.findAll();
     }
 
-    public List<Orden> obtenerMisOrdenes(
-            String email
-    ) {
-        return ordenRepo.findByUsuarioEmail(
-                email
-        );
+    public List<Orden> obtenerMisOrdenes(String email) {
+        return ordenRepo.findByUsuarioEmail(email);
     }
 
     public Orden crearOrden(
@@ -44,76 +40,49 @@ public class OrdenService {
     ) {
 
         Usuario usuario =
-                usuarioRepo.findByEmail(
-                        emailUsuario
-                ).orElseThrow(() ->
-                        new RuntimeException(
-                                "Usuario no encontrado"
-                        ));
+                usuarioRepo.findByEmail(emailUsuario)
+                        .orElseThrow(() ->
+                                new RuntimeException("Usuario no encontrado"));
 
         Orden orden = new Orden();
-
         orden.setUsuario(usuario);
-        orden.setFecha(
-                LocalDateTime.now()
-        );
-
-        orden.setEstado(
-                "PAGADO"
-        );
+        orden.setFecha(LocalDateTime.now());
+        orden.setEstado("PENDIENTE");
 
         double total = 0;
 
-        List<DetalleOrden> detalles =
-                new ArrayList<>();
+        List<DetalleOrden> detalles = new ArrayList<>();
 
         for (DetalleOrden item : items) {
 
+            if (item.getProductoId() == null) {
+                throw new RuntimeException("productoId viene null desde frontend");
+            }
+
             Producto producto =
-                    productoRepo.findById(
-                            item.getProductoId()
-                    ).orElseThrow(() ->
-                            new RuntimeException(
-                                    "Producto no encontrado"
-                            ));
+                    productoRepo.findById(item.getProductoId())
+                            .orElseThrow(() ->
+                                    new RuntimeException("Producto no encontrado"));
 
             // validar stock
-            if (producto.getStock()
-                    < item.getCantidad()) {
-
-                throw new RuntimeException(
-                        "Sin stock para: "
-                                + producto.getNombre()
-                );
+            if (producto.getStock() < item.getCantidad()) {
+                throw new RuntimeException("Sin stock para: " + producto.getNombre());
             }
 
             // descontar stock
-            producto.setStock(
-                    producto.getStock()
-                            - item.getCantidad()
-            );
-
+            producto.setStock(producto.getStock() - item.getCantidad());
             productoRepo.save(producto);
 
             // crear detalle real
-            DetalleOrden detalle =
-                    new DetalleOrden();
-
+            DetalleOrden detalle = new DetalleOrden();
             detalle.setOrden(orden);
             detalle.setProducto(producto);
-            detalle.setCantidad(
-                    item.getCantidad()
-            );
-
-            detalle.setPrecioUnitario(
-                    producto.getPrecio()
-            );
+            detalle.setCantidad(item.getCantidad());
+            detalle.setPrecioUnitario(producto.getPrecio());
 
             detalles.add(detalle);
 
-            total +=
-                    producto.getPrecio()
-                            * item.getCantidad();
+            total += producto.getPrecio() * item.getCantidad();
         }
 
         orden.setItems(detalles);

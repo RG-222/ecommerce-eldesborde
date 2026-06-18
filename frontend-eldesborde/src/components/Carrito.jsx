@@ -27,14 +27,13 @@ function Carrito() {
 
     try {
 
-      const items = carrito.map(
-        (item) => ({
-          productoId: item.id,
-          cantidad: item.cantidad
-        })
-      );
+      const items = carrito.map((item) => ({
+        productoId: Number(item.id),
+        cantidad: Number(item.cantidad)
+      }));
 
-      const res = await fetch(
+      // crear orden
+      const ordenRes = await fetch(
         "http://localhost:8080/api/ordenes",
         {
           method: "POST",
@@ -48,27 +47,46 @@ function Carrito() {
         }
       );
 
-      if (!res.ok) {
+      if (!ordenRes.ok) {
 
         const error =
-          await res.text();
+          await ordenRes.text();
 
-        console.log("ERROR BACKEND:", error);
-
-        throw new Error(
-          `HTTP ${res.status}: ${error}`
-        );
+        throw new Error(error);
       }
 
       const orden =
-        await res.json();
+        await ordenRes.json();
 
-      alert(
-        `Compra realizada 🎉
-Orden #${orden.id}`
+      console.log("ORDEN:", orden);
+
+      // crear pago
+      const pagoRes = await fetch(
+        `http://localhost:8080/api/pagos/crear?ordenId=${orden.id}&monto=${total}`,
+        {
+          method: "POST"
+        }
       );
 
-      vaciarCarrito();
+      const pago =
+        await pagoRes.json();
+
+      console.log(
+        "RESPUESTA PAGO:",
+        pago
+      );
+
+      if (
+        !pago.url ||
+        !pago.token
+      ) {
+        throw new Error(
+          "No llegó respuesta válida de Transbank"
+        );
+      }
+
+      window.location.href =
+        `${pago.url}?token_ws=${pago.token}`;
 
     } catch (error) {
 

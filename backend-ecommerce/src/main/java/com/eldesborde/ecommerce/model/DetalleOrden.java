@@ -23,7 +23,15 @@ public class DetalleOrden {
 
     private Double precioUnitario;
 
-    // 🔥 temporal para recibir desde frontend
     @Transient
     private Long productoId;
+
+    // 🔥 IMPORTANTE: evita problemas de deserialización
+    public Long getProductoId() {
+        return productoId;
+    }
+
+    public void setProductoId(Long productoId) {
+        this.productoId = productoId;
+    }
 }

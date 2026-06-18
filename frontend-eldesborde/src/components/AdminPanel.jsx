@@ -29,11 +29,40 @@ function AdminPanel() {
 
   const cargarOrdenes = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/ordenes");
+
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(
+        "http://localhost:8080/api/ordenes",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(
+          `Error ${res.status}`
+        );
+      }
+
       const data = await res.json();
-      setOrdenes(data);
+
+      setOrdenes(
+        Array.isArray(data)
+          ? data
+          : []
+      );
+
     } catch (e) {
-      console.error("Error órdenes:", e);
+
+      console.error(
+        "Error órdenes:",
+        e
+      );
+
+      setOrdenes([]);
     }
   };
 
@@ -45,10 +74,13 @@ function AdminPanel() {
   // =======================
   // 💰 MÉTRICAS DASHBOARD
   // =======================
-  const ingresosTotales = ordenes.reduce(
-    (acc, o) => acc + o.total,
-    0
-  );
+  const ingresosTotales =
+    Array.isArray(ordenes)
+      ? ordenes.reduce(
+          (acc, o) => acc + o.total,
+          0
+        )
+      : 0;
 
   const totalOrdenes = ordenes.length;
 

@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import ClienteDashboard from "./components/ClienteDashboard";
 import Navbar from "./components/Navbar";
 import Register from "./components/Register";
+import PagoExitoso from "./components/PagoExitoso";
 
 function App() {
 
@@ -35,25 +36,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/carrito" element={<Carrito />} />
 
-        <Route
-          path="/admin"
-          element={<AdminRoute><AdminPanel /></AdminRoute>}
-        />
+        <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
 
-        <Route
-          path="/admin/ordenes"
-          element={<AdminRoute><AdminOrders /></AdminRoute>}
-        />
+        <Route path="/admin/ordenes" element={<AdminRoute><AdminOrders /></AdminRoute>} />
 
-        <Route
-          path="/mi-cuenta"
-          element={<ClienteDashboard />}
-        />
+        <Route path="/mi-cuenta" element={<ClienteDashboard />} />
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/register" element={<Register />} />
+        <Route path="/pago-exitoso" element={<PagoExitoso />} />
       </Routes>
 
     </Router>

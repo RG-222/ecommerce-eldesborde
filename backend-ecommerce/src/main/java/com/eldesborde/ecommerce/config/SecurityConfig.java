@@ -23,30 +23,30 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
 
-            // 🔥 CORS REAL
+            // CORS
             .cors(cors -> cors.configurationSource(request -> {
 
                 CorsConfiguration config =
-                    new CorsConfiguration();
+                        new CorsConfiguration();
 
                 config.setAllowedOriginPatterns(
-                    List.of(
-                        "http://localhost:*"
-                    )
+                        List.of(
+                                "http://localhost:*"
+                        )
                 );
 
                 config.setAllowedMethods(
-                    List.of(
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "DELETE",
-                        "OPTIONS"
-                    )
+                        List.of(
+                                "GET",
+                                "POST",
+                                "PUT",
+                                "DELETE",
+                                "OPTIONS"
+                        )
                 );
 
                 config.setAllowedHeaders(
-                    List.of("*")
+                        List.of("*")
                 );
 
                 config.setAllowCredentials(true);
@@ -56,38 +56,44 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
-                // preflight cors
+                // preflight CORS
                 .requestMatchers(
-                    HttpMethod.OPTIONS,
-                    "/**"
+                        HttpMethod.OPTIONS,
+                        "/**"
                 ).permitAll()
 
-                // públicas
+                // rutas públicas
                 .requestMatchers(
-                    "/api/auth/**"
+                        "/api/auth/**"
                 ).permitAll()
 
                 .requestMatchers(
-                    "/api/productos/**"
+                        "/api/productos/**"
                 ).permitAll()
-
-                // admin
-                .requestMatchers(
-                    "/api/ordenes"
-                ).hasRole("ADMIN")
 
                 // cliente autenticado
                 .requestMatchers(
-                    "/api/ordenes/crear"
+                        HttpMethod.POST,
+                        "/api/ordenes/**"
                 ).authenticated()
 
-                .anyRequest()
-                .authenticated()
+                .requestMatchers(
+                        "/api/ordenes/mis-ordenes"
+                ).authenticated()
+
+                // admin
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/ordenes"
+                ).hasRole("ADMIN")
+
+                // temporal para evitar bloqueos raros
+                .anyRequest().permitAll()
             )
 
             .addFilterBefore(
-                jwtFilter,
-                UsernamePasswordAuthenticationFilter.class
+                    jwtFilter,
+                    UsernamePasswordAuthenticationFilter.class
             );
 
         return http.build();

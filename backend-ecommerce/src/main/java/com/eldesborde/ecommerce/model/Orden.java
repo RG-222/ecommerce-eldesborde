@@ -3,6 +3,8 @@ package com.eldesborde.ecommerce.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,7 +26,7 @@ public class Orden {
 
     private LocalDateTime fecha;
 
-    @OneToMany(mappedBy = "orden",
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<DetalleOrden> items;
 }

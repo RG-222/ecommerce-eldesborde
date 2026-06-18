@@ -1,52 +1,123 @@
-import React from "react";
-import { useAuth } from "../context/AuthContext";
+import React, {
+  useEffect,
+  useState
+} from "react";
 
 function ClienteDashboard() {
 
-  const { user } = useAuth();
+  const [ordenes, setOrdenes] =
+    useState([]);
 
-  if (!user) {
-    return (
-      <div style={{ padding: "20px" }}>
-        <p>No hay sesión activa</p>
-      </div>
+  const user =
+    JSON.parse(
+      localStorage.getItem("user")
     );
-  }
+
+  useEffect(() => {
+
+    const cargarOrdenes =
+      async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem(
+            "token"
+          );
+
+        const res =
+          await fetch(
+            "http://localhost:8080/api/ordenes/mis-ordenes",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          );
+
+        const data =
+          await res.json();
+
+        setOrdenes(data);
+
+      } catch (error) {
+
+        console.error(error);
+      }
+    };
+
+    cargarOrdenes();
+
+  }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "30px" }}>
 
-      <h1>👤 Mi Cuenta</h1>
+      <h1>
+        👤 Mi cuenta
+      </h1>
 
-      <div style={card}>
-        <h2 style={{ color: "black" }}>
-          Bienvenido {user.nombre}
-        </h2>
+      <h2>
+        Bienvenido {user?.nombre}
+      </h2>
 
-        <p style={{ color: "black" }}>
-          <b>Email:</b> {user.sub}
+      <h3>
+        Historial de compras
+      </h3>
+
+      {ordenes.length === 0 ? (
+        <p>
+          No tienes compras
         </p>
+      ) : (
+        ordenes.map((o) => (
+          <div
+            key={o.id}
+            style={{
+              border:
+                "1px solid #ddd",
+              padding: "20px",
+              borderRadius:
+                "10px",
+              marginBottom:
+                "20px"
+            }}
+          >
+            <h4>
+              Orden #{o.id}
+            </h4>
 
-      </div>
+            <p>
+              Estado:
+              {" "}
+              {o.estado}
+            </p>
 
-      <h2>🛍 Mis opciones</h2>
+            <p>
+              Total:
+              {" "}
+              $
+              {o.total}
+            </p>
 
-      <ul>
-        <li>Ver productos</li>
-        <li>Mis pedidos</li>
-        <li>Carrito</li>
-        <li>Historial de compras</li>
-      </ul>
+            <h5>
+              Productos
+            </h5>
+
+            {o.items?.map((i) => (
+              <div key={i.id}>
+                • {i.producto?.nombre}
+                {" "}
+                x{i.cantidad}
+              </div>
+            ))}
+          </div>
+        ))
+      )}
 
     </div>
   );
 }
-
-const card = {
-  padding: "20px",
-  background: "#f5f5f5",
-  borderRadius: "10px",
-  marginBottom: "20px"
-};
 
 export default ClienteDashboard;

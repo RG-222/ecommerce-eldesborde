@@ -13,7 +13,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/pagos")
-@CrossOrigin("*")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://ecommerce-eldesborde-1.onrender.com"
+})
 public class PagoController {
 
     private final OrdenRepository ordenRepo;

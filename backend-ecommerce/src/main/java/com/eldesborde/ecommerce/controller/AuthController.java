@@ -8,7 +8,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin("*")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://ecommerce-eldesborde-1.onrender.com"
+})
 public class AuthController {
 
     private final AuthService service;

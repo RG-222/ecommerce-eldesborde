@@ -9,7 +9,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ordenes")
-@CrossOrigin("*")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://ecommerce-eldesborde-1.onrender.com"
+})
 public class OrdenController {
 
     private final OrdenService service;

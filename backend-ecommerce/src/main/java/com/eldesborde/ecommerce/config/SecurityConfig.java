@@ -31,7 +31,8 @@ public class SecurityConfig {
 
                 config.setAllowedOriginPatterns(
                         List.of(
-                                "http://localhost:*"
+                                "http://localhost:*",
+                                "https://ecommerce-eldesborde.vercel.app"
                         )
                 );
 
@@ -52,7 +53,7 @@ public class SecurityConfig {
                 config.setAllowCredentials(true);
 
                 return config;
-            }))
+                }))
 
             .authorizeHttpRequests(auth -> auth
 

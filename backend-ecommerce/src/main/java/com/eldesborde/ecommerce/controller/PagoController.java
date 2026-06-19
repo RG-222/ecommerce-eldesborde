@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequestMapping("/api/pagos")
 @CrossOrigin(origins = {
         "http://localhost:5173",
-        "https://ecommerce-eldesborde-1.onrender.com"
+        "https://ecommerce-eldesborde.vercel.app"
 })
 public class PagoController {
 
@@ -41,7 +41,7 @@ public class PagoController {
         String buyOrder = "ORD" + ordenId;
         String sessionId = UUID.randomUUID().toString().substring(0, 20);
 
-        String returnUrl = "http://localhost:5173/pago-exitoso";
+        String returnUrl = "https://ecommerce-eldesborde.vercel.app/pago-exitoso";
 
         WebpayPlus.Transaction tx = new WebpayPlus.Transaction();
 

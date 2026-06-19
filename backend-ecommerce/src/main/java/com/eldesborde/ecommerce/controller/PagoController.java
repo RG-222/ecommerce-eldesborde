@@ -55,7 +55,9 @@ public class PagoController {
     }
 
     @PostMapping("/confirmar")
-    public Map<String, Object> confirmarPago(@RequestParam String token_ws) throws Exception {
+    public Map<String, Object> confirmarPago(@RequestBody Map<String, String> body) throws Exception {
+
+        String token_ws = body.get("token_ws");
 
         WebpayPlus.Transaction tx = new WebpayPlus.Transaction();
         var response = tx.commit(token_ws);
@@ -66,17 +68,14 @@ public class PagoController {
         Orden orden = ordenRepo.findById(ordenId)
                 .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
 
-        if ("AUTHORIZED".equals(response.getStatus())) {
-            orden.setEstado("PAGADO");
-        } else {
-            orden.setEstado("CANCELADO");
-        }
+        orden.setEstado("AUTHORIZED".equals(response.getStatus())
+                ? "PAGADO"
+                : "CANCELADO");
 
         ordenRepo.save(orden);
 
         return Map.of(
                 "status", response.getStatus(),
-                "buyOrder", response.getBuyOrder(),
                 "ordenId", orden.getId()
         );
     }

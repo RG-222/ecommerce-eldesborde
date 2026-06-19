@@ -28,8 +28,12 @@ function PagoExitoso() {
         }
 
         const res = await fetch(
-          `https://ecommerce-eldesborde.onrender.com/api/pagos/confirmar?token_ws=${token}`,
-          { method: "POST" }
+          "https://ecommerce-eldesborde.onrender.com/api/pagos/confirmar",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token_ws: token })
+          }
         );
 
         const data = await res.json();

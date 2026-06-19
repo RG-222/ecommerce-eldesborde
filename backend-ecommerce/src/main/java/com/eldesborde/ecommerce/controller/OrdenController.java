@@ -44,4 +44,12 @@ public class OrdenController {
 
         return service.crearOrden(items, email);
     }
+
+    @PutMapping("/{id}/estado")
+    public Orden actualizarEstado(
+            @PathVariable Long id,
+            @RequestBody EstadoRequest request
+    ) {
+        return service.actualizarEstado(id, request.getEstado());
+    }
 }

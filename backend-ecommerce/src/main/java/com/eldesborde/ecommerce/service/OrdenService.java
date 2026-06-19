@@ -39,10 +39,8 @@ public class OrdenService {
             String emailUsuario
     ) {
 
-        Usuario usuario =
-                usuarioRepo.findByEmail(emailUsuario)
-                        .orElseThrow(() ->
-                                new RuntimeException("Usuario no encontrado"));
+        Usuario usuario = usuarioRepo.findByEmail(emailUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         Orden orden = new Orden();
         orden.setUsuario(usuario);
@@ -59,10 +57,8 @@ public class OrdenService {
                 throw new RuntimeException("productoId viene null desde frontend");
             }
 
-            Producto producto =
-                    productoRepo.findById(item.getProductoId())
-                            .orElseThrow(() ->
-                                    new RuntimeException("Producto no encontrado"));
+            Producto producto = productoRepo.findById(item.getProductoId())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
             // validar stock
             if (producto.getStock() < item.getCantidad()) {
@@ -89,5 +85,40 @@ public class OrdenService {
         orden.setTotal(total);
 
         return ordenRepo.save(orden);
+    }
+
+    public Orden actualizarEstado(Long id, String nuevoEstado) {
+
+        Orden orden = ordenRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+
+        String actual = orden.getEstado();
+
+        if (!esTransicionValida(actual, nuevoEstado)) {
+            throw new RuntimeException("Transición de estado inválida");
+        }
+
+        orden.setEstado(nuevoEstado);
+        return ordenRepo.save(orden);
+    }
+
+    private boolean esTransicionValida(String actual, String nuevo) {
+
+        return switch (actual) {
+
+            case "PENDIENTE" ->
+                    nuevo.equals("CANCELADO");
+
+            case "PAGADO" ->
+                    nuevo.equals("PREPARANDO");
+
+            case "PREPARANDO" ->
+                    nuevo.equals("ENVIADO");
+
+            case "ENVIADO" ->
+                    nuevo.equals("ENTREGADO");
+
+            default -> false;
+        };
     }
 }

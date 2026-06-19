@@ -3,7 +3,6 @@ package com.eldesborde.ecommerce.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -23,7 +22,7 @@ public class Orden {
     private Double total;
 
     private String estado;
-    // PENDIENTE, PAGADO, CANCELADO
+    // PENDIENTE, PAGADO, PREPARANDO, ENVIADO, ENTREGADO
 
     private LocalDateTime fecha;
 

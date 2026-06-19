@@ -19,6 +19,7 @@ public class DetalleOrden {
     private Orden orden;
 
     @ManyToOne
+    @JsonIgnore
     private Producto producto;
 
     private Integer cantidad;

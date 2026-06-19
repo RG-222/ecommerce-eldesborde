@@ -55,28 +55,38 @@ public class PagoController {
     }
 
     @PostMapping("/confirmar")
-    public Map<String, Object> confirmarPago(@RequestBody Map<String, String> body) throws Exception {
+    public Map<String, Object> confirmarPago(@RequestBody Map<String, String> body) {
 
-        String token_ws = body.get("token_ws");
+        try {
+            String token_ws = body.get("token_ws");
 
-        WebpayPlus.Transaction tx = new WebpayPlus.Transaction();
-        var response = tx.commit(token_ws);
+            if (token_ws == null) {
+                throw new RuntimeException("token_ws null");
+            }
 
-        String buyOrder = response.getBuyOrder();
-        Long ordenId = Long.parseLong(buyOrder.replace("ORD", ""));
+            WebpayPlus.Transaction tx = new WebpayPlus.Transaction();
+            var response = tx.commit(token_ws);
 
-        Orden orden = ordenRepo.findById(ordenId)
-                .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+            String buyOrder = response.getBuyOrder();
+            Long ordenId = Long.parseLong(buyOrder.replace("ORD", ""));
 
-        orden.setEstado("AUTHORIZED".equals(response.getStatus())
-                ? "PAGADO"
-                : "CANCELADO");
+            Orden orden = ordenRepo.findById(ordenId)
+                    .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
 
-        ordenRepo.save(orden);
+            orden.setEstado("AUTHORIZED".equals(response.getStatus())
+                    ? "PAGADO"
+                    : "CANCELADO");
 
-        return Map.of(
-                "status", response.getStatus(),
-                "ordenId", orden.getId()
-        );
+            ordenRepo.save(orden);
+
+            return Map.of(
+                    "status", response.getStatus(),
+                    "ordenId", orden.getId()
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error en confirmación de pago: " + e.getMessage());
+        }
     }
 }

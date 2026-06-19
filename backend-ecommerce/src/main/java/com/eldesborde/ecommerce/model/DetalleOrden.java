@@ -1,5 +1,6 @@
 package com.eldesborde.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,7 +14,8 @@ public class DetalleOrden {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
+    @JoinColumn(name = "orden_id")
+    @JsonBackReference
     private Orden orden;
 
     @ManyToOne

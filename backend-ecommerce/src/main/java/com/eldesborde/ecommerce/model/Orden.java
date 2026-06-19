@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,6 +28,6 @@ public class Orden {
     private LocalDateTime fecha;
 
     @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference
     private List<DetalleOrden> items;
 }

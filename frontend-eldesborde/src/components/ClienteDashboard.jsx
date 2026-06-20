@@ -36,10 +36,17 @@ function ClienteDashboard() {
             }
           );
 
-        const data =
-          await res.json();
+        if (!res.ok) {
+          console.error(data);
+          setOrdenes([]);
+          return;
+        }
 
-        setOrdenes(data);
+        setOrdenes(
+          Array.isArray(data)
+            ? data
+            : []
+        );
 
       } catch (error) {
 

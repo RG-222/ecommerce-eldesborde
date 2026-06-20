@@ -67,7 +67,7 @@ const Tienda = () => {
           >
 
             <img
-              src={producto.imagenUrl}
+              src={producto.imagenUrl || 'https://via.placeholder.com/220x200.png?text=Bolso+Sin+Imagen'}
               alt={producto.nombre}
               style={{
                 width: '100%',

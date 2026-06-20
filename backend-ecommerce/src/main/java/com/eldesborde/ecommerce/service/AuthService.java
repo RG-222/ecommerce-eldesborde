@@ -33,11 +33,30 @@ public class AuthService {
     }
 
     public String login(String email, String password) {
+
         Usuario usuario = usuarioRepo.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        if (!passwordEncoder.matches(password, usuario.getPassword())) {
-            throw new RuntimeException("Contraseña incorrecta");
+        String storedPassword = usuario.getPassword();
+
+        // 🔥 CASO 1: password en BCrypt (nuevo sistema)
+        if (storedPassword != null && storedPassword.startsWith("$2a")) {
+
+            if (!passwordEncoder.matches(password, storedPassword)) {
+                throw new RuntimeException("Contraseña incorrecta");
+            }
+
+        } 
+        // 🔥 CASO 2: password en texto plano (usuarios antiguos)
+        else {
+
+            if (!password.equals(storedPassword)) {
+                throw new RuntimeException("Contraseña incorrecta");
+            }
+
+            // 🔄 MIGRACIÓN AUTOMÁTICA A BCRYPT
+            usuario.setPassword(passwordEncoder.encode(password));
+            usuarioRepo.save(usuario);
         }
 
         return jwtUtil.generarToken(usuario.getEmail(), usuario.getRol());

@@ -179,30 +179,6 @@ function AdminPanel() {
   return (
     <div style={{ padding: '20px' }}>
 
-      <h2>📊 Metricas</h2>
-
-      {/* =======================
-          KPI CARDS
-      ======================= */}
-      <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
-
-        <div style={card}>
-          <h3>💰 Ingresos</h3>
-          <p>${ingresosTotales}</p>
-        </div>
-
-        <div style={card}>
-          <h3>🧾 Órdenes</h3>
-          <p>{totalOrdenes}</p>
-        </div>
-
-        <div style={card}>
-          <h3>🔥 Top Producto</h3>
-          <p>{productoTop || "N/A"}</p>
-        </div>
-
-      </div>
-
       {/* =======================
           FORM PRODUCTOS
       ======================= */}
